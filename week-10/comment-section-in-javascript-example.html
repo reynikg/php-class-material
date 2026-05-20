@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Το Μέλλον της Τεχνολογίας | TechBlog</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f9fafb;
+            color: #374151;
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #111827;
+            font-size: 2.2em;
+            margin-top: 0;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 15px;
+        }
+
+        .article-content {
+            font-size: 1.1em;
+            margin-bottom: 50px;
+        }
+
+        .comments-section {
+            border-top: 2px solid #e5e7eb;
+            padding-top: 30px;
+        }
+
+        .comments-section h2 {
+            font-size: 1.5em;
+            color: #1f2937;
+        }
+
+        .comment-box {
+            background-color: #f3f4f6;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 5px;
+            font-size: 1.05em;
+        }
+
+        .comment-text {
+            margin: 0;
+            color: #4b5563;
+        }
+
+        .form-section {
+            margin-top: 40px;
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #2563eb;
+        }
+
+        /* Επιπλέον κλάση για το δοχείο μηνυμάτων ώστε να μην χαλάει η δομή όταν είναι άδειο */
+        #statusMessage:empty {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Το Μέλλον της Τεχνολογίας</h1>
+        <div class="article-content">
+            <p>Η τεχνητή νοημοσύνη και η μηχανική μάθηση αλλάζουν ραγδαία τον τρόπο που εργαζόμαστε και αλληλεπιδρούμε με τον κόσμο. Στα επόμενα χρόνια, θα δούμε ακόμα μεγαλύτερη ενσωμάτωση των αλγορίθμων στην καθημερινότητά μας.</p>
+            <p>Ποια είναι η δική σας άποψη; Αφήστε το σχόλιό σας παρακάτω.</p>
+        </div>
+
+        <div class="comments-section">
+            <h2>Σχόλια Αναγνωστών</h2>
+
+            <!-- Εδώ θα εμφανίζονται δυναμικά τα σχόλια μέσω JS -->
+            <div id="commentsListContainer"></div>
+
+            <div class="form-section">
+                <h3>Αφήστε μια απάντηση</h3>
+                
+                <!-- Δοχείο για τα μηνύματα (επιτυχίας / σφάλματος) -->
+                <div id="statusMessage"></div>
+                
+                <form id="commentForm">
+                    <div class="form-group">
+                        <label for="author_name">Το Όνομά σας</label>
+                        <input type="text" id="author_name" name="author_name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comment_text">Το Σχόλιό σας (έως 200 χαρακτήρες)</label>
+                        <textarea id="comment_text" name="comment_text" rows="4"></textarea>
+                    </div>
+                    
+                    <button type="submit">Δημοσίευση Σχολίου</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // 1. Προσομοίωση Βάσης Δεδομένων (Αρχικά Σχόλια)
+        let commentsDatabase = [
+            {
+                author: "Γιώργος",
+                text: "Πολύ σωστά! Οι αλλαγές έρχονται γρήγορα.",
+                date: "2023-10-25 14:30:00"
+            }
+        ];
+
+        // Regex για τις απαγορευμένες λέξεις (όπως στην PHP)
+        const badWordsRegex = /(χαζ[ό|ός]|βλάκα[ς]?)/gi;
+
+        const commentsListContainer = document.getElementById('commentsListContainer');
+        const statusMessage = document.getElementById('statusMessage');
+        const commentForm = document.getElementById('commentForm');
+
+        // Συνάρτηση για προστασία από XSS (αντίστοιχο του htmlspecialchars)
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // 2. Εμφάνιση των σχολίων
+        function renderComments() {
+            commentsListContainer.innerHTML = '';
+
+            if (commentsDatabase.length === 0) {
+                commentsListContainer.innerHTML = '<p>Δεν υπάρχουν σχόλια ακόμα. Γίνετε ο πρώτος!</p>';
+                return;
+            }
+
+            // Εμφάνιση των σχολίων (με σειρά από το νεότερο στο παλαιότερο)
+            commentsDatabase.forEach(comment => {
+                // XSS Protection
+                const safeName = escapeHTML(comment.author);
+                const safeComment = escapeHTML(comment.text);
+
+                // Φιλτράρισμα υβριστικών λέξεων
+                const cleanCommentText = safeComment.replace(badWordsRegex, '***');
+
+                // Δημιουργία HTML
+                const commentHTML = `
+                    <div class="comment-box">
+                        <div class="comment-author">${safeName} <span style="font-size:0.8em; color:#9ca3af; font-weight:normal;">(${comment.date})</span></div>
+                        <p class="comment-text">${cleanCommentText}</p>
+                    </div>
+                `;
+                
+                commentsListContainer.insertAdjacentHTML('beforeend', commentHTML);
+            });
+        }
+
+        // Αρχική εμφάνιση σχολίων μόλις φορτώσει η σελίδα
+        renderComments();
+
+        // 3. Επεξεργασία της φόρμας
+        commentForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Αποτροπή ανανέωσης της σελίδας
+
+            // Καθαρισμός ακραίων κενών (trim)
+            const nameInput = document.getElementById('author_name').value.trim();
+            const commentInput = document.getElementById('comment_text').value.trim();
+
+            statusMessage.innerHTML = ''; // Καθαρισμός προηγούμενου μηνύματος
+
+            // Έλεγχος για κενά πεδία
+            if (nameInput === '' || commentInput === '') {
+                statusMessage.innerHTML = "<div style='color: #dc2626; background-color: #fee2e2; padding: 10px; border-radius: 5px; margin-bottom: 15px;'>Παρακαλώ συμπληρώστε όλα τα πεδία.</div>";
+            } 
+            // Έλεγχος ορίου χαρακτήρων
+            else if (commentInput.length > 200) {
+                statusMessage.innerHTML = "<div style='color: #dc2626; background-color: #fee2e2; padding: 10px; border-radius: 5px; margin-bottom: 15px;'>Το σχόλιό σας δεν μπορεί να ξεπερνά τους 200 χαρακτήρες.</div>";
+            } 
+            else {
+                // Δημιουργία τρέχουσας ημερομηνίας με μορφή YYYY-MM-DD HH:MM:SS
+                const now = new Date();
+                const formattedDate = now.getFullYear() + '-' + 
+                                     String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                                     String(now.getDate()).padStart(2, '0') + ' ' + 
+                                     String(now.getHours()).padStart(2, '0') + ':' + 
+                                     String(now.getMinutes()).padStart(2, '0') + ':' + 
+                                     String(now.getSeconds()).padStart(2, '0');
+
+                // Αποθήκευση στη "Βάση" (στην αρχή του πίνακα για να εμφανίζεται πρώτο όπως το ORDER BY id DESC)
+                commentsDatabase.unshift({
+                    author: nameInput,
+                    text: commentInput,
+                    date: formattedDate
+                });
+
+                // Επιτυχία: Ενημέρωση UI
+                statusMessage.innerHTML = "<div style='color: #16a34a; background-color: #dcfce7; padding: 10px; border-radius: 5px; margin-bottom: 15px;'>Το σχόλιό σας δημοσιεύθηκε με επιτυχία!</div>";
+                
+                // Καθαρισμός της φόρμας
+                commentForm.reset();
+
+                // Επανασχεδιασμός των σχολίων
+                renderComments();
+            }
+        });
+    </script>
+
+</body>
+</html>
